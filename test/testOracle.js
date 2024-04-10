@@ -2,7 +2,7 @@
 const { BigNumber } = require("bignumber.js");
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const { getPoolParts, getIzumiswapFactory, attachiZiSwapPool } = require("./funcs.js")
+const { getPoolParts, getXSwapFactory, attachXSwapPool } = require("./funcs.js")
 
 async function getToken() {
 
@@ -266,10 +266,10 @@ describe("test uniswap price oracle", function () {
         wethAddr = weth.address;
 
         const {swapX2YModule, swapY2XModule, liquidityModule, limitOrderModule, flashModule} = await getPoolParts();
-        izumiswapFactory = await getIzumiswapFactory(receiver.address, swapX2YModule, swapY2XModule, liquidityModule, limitOrderModule, flashModule, signer);
-        nflm = await getNFTLiquidityManager(izumiswapFactory.address, wethAddr);
+        xswapFactory = await getXSwapFactory(receiver.address, swapX2YModule, swapY2XModule, liquidityModule, limitOrderModule, flashModule, signer);
+        nflm = await getNFTLiquidityManager(xswapFactory.address, wethAddr);
         console.log("get nflm");
-        swap = await getSwap(izumiswapFactory.address, wethAddr);
+        swap = await getSwap(xswapFactory.address, wethAddr);
 
         console.log("get swp");
 
@@ -321,7 +321,7 @@ describe("test uniswap price oracle", function () {
         q96 = BigNumber(2).pow(96);
 
         poolXYAddr = await nflm.pool(tokenX.address, tokenY.address, 2000);
-        pool = await attachiZiSwapPool(poolXYAddr)
+        pool = await attachXSwapPool(poolXYAddr)
 
         console.log('aaaaa')
     });

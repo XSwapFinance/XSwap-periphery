@@ -48,18 +48,18 @@ function stringLess(a, b) {
 }
 
 async function getPool(poolAddr, signer) {
-    const poolJson = getContractJson(__dirname + '/core/iZiSwapPool.json');
+    const poolJson = getContractJson(__dirname + '/core/XSwapPool.json');
     const poolFactory = await ethers.getContractFactory(poolJson.abi, poolJson.bytecode, signer)
     const pool =  poolFactory.attach(poolAddr)
     return pool
 }
 
-async function getIzumiswapFactory(receiverAddr, swapX2YModule, swapY2XModule, liquidityModule, limitOrderModule, flashModule, signer) {
-    const iZiSwapJson = getContractJson(__dirname + '/core/iZiSwapFactory.json');
+async function getXSwapFactory(receiverAddr, swapX2YModule, swapY2XModule, liquidityModule, limitOrderModule, flashModule, signer) {
+    const XSwapJson = getContractJson(__dirname + '/core/XSwapFactory.json');
     
-    const iZiSwapFactory = await ethers.getContractFactory(iZiSwapJson.abi, iZiSwapJson.bytecode, signer);
+    const XSwapFactory = await ethers.getContractFactory(XSwapJson.abi, XSwapJson.bytecode, signer);
 
-    const factory = await iZiSwapFactory.deploy(receiverAddr, swapX2YModule, swapY2XModule, liquidityModule, limitOrderModule, flashModule, 50);
+    const factory = await XSwapFactory.deploy(receiverAddr, swapX2YModule, swapY2XModule, liquidityModule, limitOrderModule, flashModule, 50);
     await factory.deployed();
 
     await factory.enableFeeAmount(3000, 50);
@@ -111,8 +111,8 @@ async function getPoolParts(signer) {
 
 
 async function getLimOrder(poolAddr, pt) {
-    const iZiSwapPool = await ethers.getContractFactory("iZiSwapPool");
-    pool = await iZiSwapPool.attach(poolAddr);
+    const XSwapPool = await ethers.getContractFactory("XSwapPool");
+    pool = await XSwapPool.attach(poolAddr);
     const {sellingX, accEarnX, sellingY, accEarnY, earnX, earnY} = await pool.limitOrderData(pt);
     return {
         sellingX: BigNumber(sellingX._hex),
@@ -482,12 +482,12 @@ function getRevertString(originStr) {
 }
 
 
-async function attachiZiSwapPool(poolAddr) {
-    const iZiSwapPoolJson = getContractJson(__dirname + '/core/iZiSwapPool.json');
+async function attachXSwapPool(poolAddr) {
+    const XSwapPoolJson = getContractJson(__dirname + '/core/XSwapPool.json');
     
-    const iZiSwapPoolFactory = await ethers.getContractFactory(iZiSwapPoolJson.abi, iZiSwapPoolJson.bytecode);
+    const XSwapPoolFactory = await ethers.getContractFactory(XSwapPoolJson.abi, XSwapPoolJson.bytecode);
 
-    const pool = iZiSwapPoolFactory.attach(poolAddr);
+    const pool = XSwapPoolFactory.attach(poolAddr);
     return pool
 }
 
@@ -503,7 +503,7 @@ module.exports ={
     getContractJson,
     getPoolParts,
     getPool,
-    getIzumiswapFactory,
+    getXSwapFactory,
     getLimOrder,
     getAcquiredFee,
     getFeeCharge,
@@ -540,6 +540,6 @@ module.exports ={
     getRevertString,
     ceil,
     floor,
-    attachiZiSwapPool,
+    attachXSwapPool,
     getNFTLiquidityManager,
 }
